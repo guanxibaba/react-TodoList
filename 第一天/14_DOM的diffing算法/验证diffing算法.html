@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>key的作用</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/新版本/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/新版本/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/新版本/babel.min.js"></script>
+    <script type="text/babel">
+        // 创建组件
+        // diffing算法的最小力度是标签，也就是对比的时候是先从最外层的标签对比的，一层一层的往内对比，如果外面的标签不一致，但是里面有标签是一致的，则里面这个标签不会重新渲染
+        // 这个案例的span标签每次都会重新渲染 而input标签不会重新渲染
+        class Time extends React.Component {
+            state = {data:new Date()}  // 创建时间戳
+            // 页面挂载完毕时的钩子
+            componentDidMount() {
+                setInterval(() => {
+                    const {data} = this.state
+                    this.setState({data: new Date()})
+                },1000)
+            }
+            render() {
+                return (
+                    <div>
+                        <h1>HELLO</h1>
+                        <input type="text" />
+                        <span>{this.state.data.toString()} <input type="text"/></span>
+                    </div>
+                )
+            }
+        }
+
+        // 渲染组件到页面
+        ReactDOM.render(<Time/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

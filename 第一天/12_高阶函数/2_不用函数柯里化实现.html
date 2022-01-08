@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>不用函数柯里化实现</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/babel.min.js"></script>
+    <script type="text/babel">
+
+        // 创建组件
+        class Login extends React.Component {
+            // 初始化状态
+            state = {
+                username:'',
+                password:''
+            }
+
+            // 设置表单信息
+            saveFromData = (datatype,event) => {
+                this.setState({[datatype]:event.target.value});
+            }
+
+            // 显示表单信息
+            handSubmit = (e) => {
+                e.preventDefault();  // 阻止默认行为 也就是不让他有刷新跳转的动作
+                const {username,password} = this.state
+                alert(`你输入的用户名是：${username}，密码是：${password}`);
+            }
+
+            // onSubmit事件是当表单提交时触发
+            render() {
+                return (
+                    <form onSubmit={this.handSubmit}>
+                        用户名：<input onChange={event => this.saveFromData('username',event)} type="text" name="username"/>
+                        密码：<input onChange={event => this.saveFromData('password',event)} type="password" name="password"/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test'));
+
+        /*
+            不用函数柯里化实现的思路
+            onchange事件需要的接收的只是一个回调函数，并没有指定是什么函数
+            这是我们给他定义一个函数，并且把事件对象event传进去，函数体里面调用设置表单信息的函数并把原来的参数和event传进去
+            这时我们设置表单信息的函数只需要直接调用setState方法就可以了
+        */
+    </script>
+</body>
+</html>

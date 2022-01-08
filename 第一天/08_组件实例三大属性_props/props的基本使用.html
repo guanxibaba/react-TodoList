@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>props的基本使用</title>
+</head>
+<body>
+        <!-- 准备容器 -->
+        <div id="test1"></div>
+        <div id="test2"></div>
+        <div id="test3"></div>
+        <!-- 引入React核心库 -->
+        <script src="../js/react.development.js"></script>
+        <!-- 引入操作虚拟DOM扩展包 -->
+        <script src="../js/react-dom.development.js"></script>
+        <!-- 引入Bebal编译器 -->
+        <script src="../js/babel.min.js"></script>
+        <script type="text/babel">
+            // 需求：页面动态的输出一组人的信息
+            // 我们可以在组件标签中直接定义属性 而定义的属性最终是以对象的形式放在了实例对象的props上
+            // 创建组件
+            class Person extends React.Component {
+                render() {
+                    // console.log(this); //指向的是实例对象
+                    const {name,age,sex} = this.props
+                    return (
+                        <ul>
+                            <li>姓名: {name}</li>
+                            <li>性别: {sex}</li>
+                            <li>年龄: {age}</li>
+                        </ul>
+                    )
+                }
+            }
+
+            // 渲染组件到页面
+            // 我们是在外面动态的创建这些属性的
+            // 方法1：可以直接在组件标签内定义属性 而定义的属性放在了实例对象的props属性上
+            // ReactDOM.render(<Person name="刘德华" age="19" sex="男"/>,document.getElementById('test1'));
+            ReactDOM.render(<Person name="范冰冰" age="30" sex="女"/>,document.getElementById('test2'));
+            ReactDOM.render(<Person name="tom" age="18" sex="男"/>,document.getElementById('test3')); 
+           
+            // 方法2： 使用扩展运算符 ...
+            const p = {name:'tam',age:'18',sex:'男'}
+            ReactDOM.render(<Person {...p} />,document.getElementById('test1'));
+            // 扩展运算符是不能展开一个对象的，但是使用字面量的方式可以展开 {...p} 
+            // 但是在这个里面 {} 表示的是标签里面混入的是一个表达式，所以要用{}。之所以还能展开是因为Babel和React的核心库把它转换为了可以展开的
+            // 但是只能是在标签里面展开，写在其他地方也是不能展开的
+            // console.log('@',...p);  //这里不能输出对象里面的内容
+        </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回调ref中回调执行的次数问题</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/babel.min.js"></script>
+    <script type="text/babel">
+            // 当我们在渲染页面时，会调用一次组件内的标签的回调函数。而我们每触发一次事件，就会调用一次render方法，并执行一次ref的回调
+            // 但是当我们页面状态发生改变时，也会调用ref的函数，并且调用两次，第一次返回的是null 第二次才是返回当前ref所在的节点，为什么呢？
+            // 因为状态在发生改变时，页面会重新渲染并且调用了render方法，而他第一次执行的ref的函数并不是原来的函数，而是为了释放这个函数，所以返回的null。第二次调用的时候才是执行的ref的函数，所以第二次才是返回当前ref所在的节点
+            // 怎么解决这个问题？
+            // 把ref的函数写在类里面就可不会调用ref函数了
+            class Demo extends React.Component{
+            showData = () => {
+                const {input1} = this
+                alert(input1.value)
+            }
+            state = {isHot:false};
+            changeWeather = () => {
+                const {isHot} = this.state;
+                this.setState({isHot:!isHot});
+            }
+            // 把回调函数写在这里就不会在页面重新渲染的时候调用ref的函数了
+            saveInput = (c) => {
+                this.input1 = c;
+                console.log('@',c);
+            }
+            render() {
+                const {isHot} = this.state
+                return (
+                    <div>
+                        <h2>今天天气很{isHot ? '炎热' : '凉爽'}</h2>
+                        {/*<input ref={c => {this.input1 = c;console.log('@',c);}} type="text" placeholder="点击按钮提示数据"/> <br/><br/>*/}
+                        <input ref={this.saveInput} type="text" placeholder="点击按钮提示数据"/> <br/><br/>
+                        <button onClick={this.showData}>点击提示左边数据</button>&nbsp;
+                        <button onClick={this.changeWeather}>点我切换天气</button>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Demo/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

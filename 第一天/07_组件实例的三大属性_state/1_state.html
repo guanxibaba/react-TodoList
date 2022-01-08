@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>state状态</title>
+</head>
+<body>
+     <!-- 准备容器 -->
+     <div id="test"></div>
+     <!-- 引入React核心库 -->
+     <script src="../js/react.development.js"></script>
+     <!-- 引入操作虚拟DOM扩展包 -->
+     <script src="../js/react-dom.development.js"></script>
+     <!-- 引入Bebal编译器 -->
+     <script src="../js/babel.min.js"></script>
+     <script type="text/babel">
+        //  创建组件
+        class Weather extends React.Component {
+            // 使用构造器初始化实例对象 因为他的实例对象上的state状态为空，我们要给他的state状态改变值，就需要使用构造器 
+            // 在这个例子里面构造器只调用了1次 初始化时调用了
+            constructor(props) {
+                super(props)
+                //初始化状态 this指向的是Weather的实例对象  
+                this.state = {isHot: false}
+                // 解决44行demo中的this指向问题 bind会返回一个新的函数并让这个函数指向当前this的指向(也就是Weather实例对象)
+                this.demo = this.demo.bind(this); // 此时的demo函数是在实例对象上的，而下面的demo函数是在原型对象上的
+            }
+
+            // render方法调用了1+n次 1次是初始化时调用 而n次是重新渲染时调用的
+            render() {
+                const {isHot} = this.state
+                // console.log(isHot)
+                // 使用内嵌式绑定事件 内嵌式绑定事件时事件类型on后面的首字母必须是大写，而且函数不能加小括号，加了小括号会直接调用函数
+                return <h1 onClick={this.demo}>今天天气很{isHot ? '炎热' : '凉爽'}</h1>
+            }
+
+            // demo方法点击了几次就调用了几次
+            demo() {
+                // demo事件放在了哪里？ Weather的原型对象上，我们想要使用，必须通过实例对象调用
+                // 由于demo是作为onClick的回调 所以不是通过实例调用的，而是触发这个事件然后调用的函数
+                // 而直接调用函数他的this指向的是window 而在类里面，他会开启局部的严格模式，所以this指向的是undefined
+                // console.log(this); 
+
+                // 获取原来的isHot值  因为我们在27行把demo的this改为了实例对象
+                const isHot = this.state.isHot;
+                // 正确写法 调用React的setState方法去改状态(state) 且setState方法 是合并，不是更改，也就是说，只会更改指定的属性，其他的原有属性并不会受影响
+                this.setState({isHot:!isHot});
+                // 更改原来的isHot值 此时发现页面并没有更改，但是isHot确实改了，为什么不能更改呢？
+                // 因为React不支持直接修改state(状态) 而要使用React上的方法setstate去改
+                // 错误写法
+                // this.state.isHot = !isHot;
+                // console.log(isHot);
+        }
+        }
+        // 渲染组件到页面
+        ReactDOM.render(<Weather/>,document.getElementById('test'));
+        
+        
+     </script>
+</body>
+</html>

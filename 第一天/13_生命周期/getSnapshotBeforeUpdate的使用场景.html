@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>getSnapshotBeforeUpdate的使用场景</title>
+    <style>
+        #test {
+            margin: 0 auto;
+            width: 500px;
+        }
+        .list {
+            width: 200px;
+            height: 150px;
+            overflow: auto;
+        }
+        .news {
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/新版本/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/新版本/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/新版本/babel.min.js"></script>
+    <script type="text/babel">
+        /*
+            需求：页面不断的动态渲染新闻，而当超出盒子时，新闻还在动态渲染，但页面不动，滚动条在哪里就显示那里的内容
+        */
+        
+        // 创建组件
+        class New extends React.Component {
+            // 初始化状态
+            state = {newArr:[]}
+
+            // 页面挂载完毕时的钩子
+            componentDidMount() {
+                // 当页面挂载完毕时 开启定时器，1秒执行一次
+                setInterval(() => {
+                    // 获取原状态
+                    const {newArr} = this.state
+                    // 创建一条新闻内容
+                    const news = '新闻' + (newArr.length + 1)
+                    // 设置状态
+                    this.setState({newArr:[news,...newArr]}) // 把当前创建的内容放在最前面，原来的内容放在后面
+                },1000)
+            }
+
+            // 组件即将更新时的钩子
+            getSnapshotBeforeUpdate() {
+                // 当组件即将更新时，把当前的盒子高度传给componentDidUpdate
+                return this.refs.list.scrollHeight
+            }
+            // 组件更新完毕时的钩子
+            componentDidUpdate(preProps,preState,height) {
+                // 当组件更新完毕时，设置盒子被卷去的高度
+                // 这句话的意思是设置当前盒子的被卷去的高度 = 当前盒子被卷去的高度 + (当前盒子的高度 - 上一次更新的高度)
+                this.refs.list.scrollTop += this.refs.list.scrollHeight - height
+            }
+
+            render() {
+                return (
+                    <div ref="list" className="list">
+                        {this.state.newArr.map((n,index) => {
+                            return <div key={index} className="news">{n}</div>
+                        })}
+                        
+                    </div>
+                )
+            }
+        }
+        // 渲染组件到页面
+        ReactDOM.render(<New/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

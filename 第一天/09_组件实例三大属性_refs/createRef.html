@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>createRef</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/babel.min.js"></script>
+    <script type="text/babel">
+            // 使用createRef 
+            // 调用React的API  createRef创建一个容器，这个容器用来放当前ref所在的节点
+            // 但是这个属性只能存放一个节点 也就是 "专人专用"的
+            // 如果有多个ref，则需要创建多个变量去创建多个容器然后存放每个ref所在的节点
+            class Demo extends React.Component{
+            myRef = React.createRef();  //这个方法创建一个容器，把当前的ref所在的节点作为value存放进去，而key是current。是固定的
+            myRef2 = React.createRef()
+            showData = () => {
+                // console.log(this.myRef.current)
+                alert(this.myRef.current.value)
+            }
+            showData2 = () => {
+                alert(this.myRef2.current.value)
+                
+            }
+            render() {
+                return (
+                    <div>
+                        <input ref={this.myRef} type="text" placeholder="点击按钮提示数据"/>&nbsp;
+                        <button onClick={this.showData}>点击提示左边数据</button>&nbsp;
+                        <input ref={this.myRef2} onBlur={this.showData2} type="text" placeholder="失去焦点提示数据"/>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Demo/>,document.getElementById('test'));
+        
+    </script>
+</body>
+</html>

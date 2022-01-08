@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>props的基本使用</title>
+</head>
+<body>
+        <!-- 准备容器 -->
+        <div id="test1"></div>
+        <div id="test2"></div>
+        <div id="test3"></div>
+        <!-- 引入React核心库 -->
+        <script src="../js/react.development.js"></script>
+        <!-- 引入操作虚拟DOM扩展包 -->
+        <script src="../js/react-dom.development.js"></script>
+        <!-- 引入Bebal编译器 -->
+        <script src="../js/babel.min.js"></script>
+        <!-- 引入prop-types扩展包 限制标签的属性 -->
+        <script src="../js/prop-types.js"></script>
+        <script type="text/babel">
+            // 创建组件
+            class Person extends React.Component {
+                render() {
+                    // console.log(this); //指向的是实例对象
+                    
+                    const {name,age,sex,spak} = this.props;
+                    spak();
+                    return (
+                        <ul>
+                            <li>姓名: {name}</li>
+                            <li>性别: {sex}</li>
+                            <li>年龄: {age + 1}</li>
+                        </ul>
+                    )
+                }
+                
+            }
+            // 通过设置类的propTypes属性来限制标签属性
+            Person.propTypes = {
+                // 通过扩展包PropTypes来限制标签属性,必须要引入扩展包之后才能使用
+                name: PropTypes.string.isRequired,  // string限制为字符串 isRequired必填
+                age: PropTypes.number, // age必须是数值型
+                sex: PropTypes.string, // sex必须是字符串型
+                spak: PropTypes.func
+            }
+            // 指定标签的默认值
+            Person.defaultProps = {
+                sex: '男',  // sex属性默认为男
+                age: 18    // age属性默认为18
+            }
+            function spak() {
+                console.log('我会说话');
+            }
+            // 需求：1.年龄都加1
+            // 2.名字必须要传且是字符串
+            // 3.性别必须是字符串，不传默认为男
+            // 3.年龄必须是数值，不传默认为18
+            // 渲染组件到页面
+            ReactDOM.render(<Person name="范冰冰" age={20} sex="女" spak={spak}/>,document.getElementById('test2')); // 要想设置属性值为number需要加 {}
+            ReactDOM.render(<Person name="tom" age={18} sex="男" spak={spak}/>,document.getElementById('test3')); 
+           
+            // 使用扩展运算符 ...
+            const p = {name:'tam',age:18,sex:'男',spak:spak}
+            ReactDOM.render(<Person {...p} />,document.getElementById('test1'));
+        </script>
+</body>
+</html>

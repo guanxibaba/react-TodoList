@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jsx的练习</title>
+</head>
+<body>
+<div id="test"></div>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+    // 动态的把数据渲染到页面*
+    // 模仿一个数据*
+    /*
+    注意点：
+        1.数据只能数组的形式，如果换成对象的形式会报错
+        2.标签中只能混入表达式，不能是语句(代码)
+        什么是表达式?
+        当我们在这个他的右边声明一个变量时，如果这变量有值，则是表达式，反之是语句(代码)
+        3.这里使用数组的map()方法生成的标签，因为每个属性都一样，所以浏览器会报错，所以我们采取他的索引号作为下标值
+    */
+    const data = ['Angular','React','Vue']
+    // 创建虚拟DOM*
+    const VDOM = (
+        <div>
+            <h1>前端js框架</h1>
+            <ul>
+                {
+                    data.map((item,index) => {
+                        return <li key={index}>{item}</li>
+                    })
+                }
+            </ul>
+        </div>
+    )
+// 渲染虚拟DOM到页面*
+ReactDOM.render(VDOM,document.getElementById('test'))
+
+</script>
+
+</body>
+
+</html>

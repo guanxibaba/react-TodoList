@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非受控组件</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/babel.min.js"></script>
+    <script type="text/babel">
+        // 创建组件
+        class Login extends React.Component {
+            handSubmit = (e) => {
+                e.preventDefault();  // 阻止默认行为 也就是不让他有刷新跳转的动作
+                const {username,password} = this
+                alert(`你输入的用户名是：${username.value}，密码是：${password.value}`);
+            }
+            // onSubmit事件是当表单提交时触发
+            render() {
+                return (
+                    <form onSubmit={this.handSubmit}>
+                        用户名：<input ref={c => this.username = c} type="text" name="username"/>
+                        密码：<input ref={c => this.password = c} type="password" name="password"/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test'));
+         // 什么叫非受控组件？  就是现用先取的时候就叫非受控组件
+         //  当页面渲染的时候把这两个表单的数据都给保存起来了，而且表单提交之后会调用这个事件，事件里面直接取出了两个表单的数据并使用了他们
+    </script>
+</body>
+</html>

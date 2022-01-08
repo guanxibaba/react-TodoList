@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用js创建虚拟DOM</title>
+</head>
+<body>
+    <!-- 准备一个容器 放虚拟DOM -->
+    <div id="test"></div>
+    <!-- 引入react核心库 核心库必须在操作虚拟元素文件前面-->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react操作虚拟DOM元素的扩展包 -->
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript"> 
+        // 1.创建虚拟DOM 使用React对象的createElement()创建虚拟DOM 第一个参数是标签名 第二个参数是便签属性 第三个参数是标签内容
+        const VDOM = React.createElement('h1',{id:'title'},React.createElement('span',{},'hello,react'));
+        // 2. 把虚拟DOM渲染到页面 因为我们引入了操作虚拟元素的扩展包，所以ReactDOM是内置的操作元素的对象 而render()方法就是帮我们把虚拟DOM渲染到页面
+        // render()方法接收两个参数，第一个参数是需要渲染的虚拟DOM元素 第二个是容器，也就是我们装虚拟DOM的
+        ReactDOM.render(VDOM,document.getElementById('test'));
+    </script>
+</body>
+</html>

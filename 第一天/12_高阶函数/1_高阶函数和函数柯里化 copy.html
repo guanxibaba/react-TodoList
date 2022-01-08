@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高阶函数和函数柯里化</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/babel.min.js"></script>
+    <script type="text/babel">
+        /*
+            高阶函数：如果一个函数满足以下两个规范中任意一个，那就是高阶函数
+                1.若A函数，接收的参数是一个函数，那么A就可以叫做高阶函数
+                2.若A函数，调用之后的返回值还是一个函数，那么A就叫高阶函数
+            
+            函数的柯里化：通过函数调用继续返回函数的方式，实现多次接收参数最后统一处理的函数编码形式
+        */
+
+        // 创建组件
+        class Login extends React.Component {
+            // 初始化状态
+            state = {
+                username:'',
+                password:''
+            }
+            saveFromData = (datatype) => {
+                return (event) => {
+                    this.setState({[datatype]:event.target.value});
+                }
+            }
+
+            handSubmit = (e) => {
+                e.preventDefault();  // 阻止默认行为 也就是不让他有刷新跳转的动作
+                const {username,password} = this.state
+                alert(`你输入的用户名是：${username}，密码是：${password}`);
+            }
+
+            // onSubmit事件是当表单提交时触发
+            render() {
+                return (
+                    <form onSubmit={this.handSubmit}>
+                        用户名：<input onChange={this.saveFromData('username')} type="text" name="username"/>
+                        密码：<input onChange={this.saveFromData('password')} type="password" name="password"/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test'));
+
+        /*
+            以上组件的执行过程
+            因为我们组件内的saveFormDATa后写了小括号，所以在渲染的时候会自动调用一次，并把返回值给了onchange事件。
+            此时我们返回的是一个函数，所以，再触发了onchange事件时会调用这个函数。这里产生了高阶函数
+            因为我们在原来的函数传了一个参数进去，而我们用datatype接收了这个参数，而在我们返回值函数里面接收了一个事件对象event，这个参数是当onchange事件触发时，React为我们生成的
+            为什么又要在函数处理程序里面写[datatype] 呢？
+            因为如果直接写datatype 则是代表这是一个字符串'datatype' 并不是变量datatype  而加个 [] 括号就可以变为原来的函数接收的参数
+        */
+
+    </script>
+</body>
+</html>

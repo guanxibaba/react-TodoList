@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React生命周期(新)</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/新版本/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/新版本/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/新版本/babel.min.js"></script>
+    <script type="text/babel">
+        // 创建组件
+        class Count extends React.Component {
+            // 构造器
+            constructor(props) {
+                console.log('constructor');
+                super(props)
+                // 初始化
+                this.state = {count: 0}
+            }
+
+            // 求和函数
+            add = () => {
+                // 获取状态
+                const {count} = this.state
+                // 设置状态
+                this.setState({count:count+1})
+            }
+
+            // 删除组件函数
+            remove = () => {
+                ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+            }
+
+            // 强制更新函数
+            force = () => {
+                this.forceUpdate()
+            }
+
+            // 组件挂载或更新时的钩子
+            static getDerivedStateFromProps(props,state) {
+                console.log('getDerivedStateFromProps',props,state);
+                return null
+            }
+
+            // 组件挂载完毕时钩子
+            componentDidMount() {
+                console.log('componentDidMount');
+            }
+
+            
+            // 控制组件更新的"阀门"
+            shouldComponentUpdate() {
+                console.log('shouldComponentUpdate');
+                return true
+            }
+
+            // 组件即将更新完毕时的钩子
+            getSnapshotBeforeUpdate(props,state) {
+                console.log('getSnapshotBeforeUpdate',props,state);
+                return null
+            }
+
+            // 组件更新完毕时钩子
+            componentDidUpdate(prevProps,pervState,Snapshot) {
+                console.log('componentDidUpdate',prevProps,pervState,Snapshot);
+            }
+
+            // 组件挂载时和状态改变时钩子
+            render() {
+                console.log('render');
+                const {count} = this.state
+                return (
+                    <div>
+                        <h2>当前求和为：{count}</h2>
+                        <button onClick={this.add}>点我+1</button>
+                        <button onClick={this.remove}>点我删除组件</button>
+                        <button onClick={this.force}>点我强制更新</button>
+                    </div>
+                )
+            }
+        }
+        
+        // 创建组件
+        class A extends React.Component {
+            // 初始化状态
+            state = {carName: '奔驰'}
+            saveCar = () => {
+                const {carName} = this.state
+                this.setState({carName: '宝马'})
+            }
+            render() {
+                const {carName} = this.state
+                return (
+                    <div>
+                        <h2>A</h2>
+                        <button onClick={this.saveCar}>点我换车</button>
+                        <B carName={carName}/>
+                    </div>
+                )
+            }
+        }
+
+        // 创建组件
+        class B extends React.Component {
+            // 组件将要接收props参数时的钩子 可以接收到props的参数
+            componentWillReceiveProps(props) {
+                console.log('B---componentWillReceiveProps',props);
+            }
+
+            // 控制组件更新的阀门
+            shouldComponentUpdate() {
+                console.log('B---shouldComponentUpdate');
+                return true
+            }
+
+            // 组件将要更新时钩子
+            componentWillUpdate() {
+                console.log('B---componentWillUpdate');
+            }
+
+            // 组件更新完毕时钩子
+            componentDidUpdate() {
+                console.log('B---componentDidUpdate');
+            }
+
+
+            render() {
+                console.log('B---render');
+                return (
+                    <h2>我是B组件，车的名字为: {this.props.carName}</h2>
+                )
+            }
+        }
+        // 渲染组件到页面
+        ReactDOM.render(<Count count={200}/>,document.getElementById('test'))
+        // ReactDOM.render(<A/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

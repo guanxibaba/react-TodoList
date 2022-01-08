@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>state的简写方式</title>
+</head>
+<body>
+     <!-- 准备容器 -->
+     <div id="test"></div>
+     <!-- 引入React核心库 -->
+     <script src="../js/react.development.js"></script>
+     <!-- 引入操作虚拟DOM扩展包 -->
+     <script src="../js/react-dom.development.js"></script>
+     <!-- 引入Bebal编译器 -->
+     <script src="../js/babel.min.js"></script>
+     <script type="text/babel">
+        //  创建组件
+        class Weather extends React.Component {
+            // 初始化状态
+            // 在类里面可以不声明赋值 但是 这个类的实例对象上边本身就有state的属性 所以只是给他的state属性重新复制而已
+            state = {isHot: false}
+
+            render() {
+                const {isHot} = this.state
+                return <h1 onClick={this.demo}>今天天气很{isHot ? '炎热' : '凉爽'}</h1>
+            }
+            // 自定义方法
+            // 在类里面可以不声明赋值 这里是把这个方法写在了这个实例对象上 而不是原型对象(不赋值的话就是写在了原型对象上)
+            // 而箭头函数里面的this指向的是当前作用域下的this指向的值，而当前作用域也就是实例对象的作用域，而this自然也就指向了实例对象
+            demo = ()=> {
+                const isHot = this.state.isHot;
+                this.setState({isHot:!isHot});
+        }
+        }
+        // 渲染组件到页面
+        ReactDOM.render(<Weather/>,document.getElementById('test'));
+        
+        
+     </script>
+</body>
+</html>

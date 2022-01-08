@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回调函数形式的ref</title>
+</head>
+<body>
+    <div id="test"></div>
+    <!-- 引入React核心库 -->
+    <script src="../js/react.development.js"></script>
+    <!-- 引入操作虚拟DOM扩展包 -->
+    <script src="../js/react-dom.development.js"></script>
+    <!-- 引入Bebal编译器 -->
+    <script src="../js/babel.min.js"></script>
+    <script type="text/babel">
+            class Demo extends React.Component{
+            showData = () => {
+                const {input1} = this
+                alert(input1.value)
+            }
+            showData2 = () => {
+                const {input2} = this   // 解构赋值，把实例对象上的input2的值赋值给input2  这个input2是一个节点
+                alert(input2.value)
+            }
+            render() {
+                return (
+                    <div>
+                        <input ref={c => this.input1 = c} type="text" placeholder="点击按钮提示数据"/>&nbsp;
+                        <button onClick={this.showData}>点击提示左边数据</button>&nbsp;
+                        <input ref={c => this.input2 = c} onBlur={this.showData2} type="text" placeholder="失去焦点提示数据"/>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Demo/>,document.getElementById('test'));
+        // 回调函数形式的ref执行过程
+        /*
+            1. 当ReactDOM解析到组件时，会执行render()方法里面的代码
+            2. 当执行到组件内标签属性有ref时会帮你调用你定义的这个函数并且把当前ref所处的节点传进去，使用c接收这个参数。并把这个参数设置为实例对象的input1的属性值
+            3.然后触发时间，执行事件绑定的函数
+        */
+    </script>
+</body>
+</html>
