@@ -1,6 +1,6 @@
 /*
-    该模块用定义常量 防止我们再编写单词比较长的常量中出现错误
+    用于定义常量名，必须出现单词错误
  */
-export const INCREMENT = 'increment'
-export const DECREMENT = 'decrement'
-export const ADD_PERSON = 'addPerson'
+    export const INCREMENT = 'increment'
+    export const DECREMENT = 'decrement'
+    export const ADD_PERSON = 'addPerson'

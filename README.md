@@ -1,3 +1,7 @@
+---
+typora-root-url: image
+---
+
 ## redux理解
 
 ### redux是什么
@@ -18,9 +22,9 @@
 
 ### 工作原理
 
-![redux原理图](E:\学习文件\尚硅谷React全家桶教程\react全家桶资料\02_原理图\redux原理图.png)
 
-### 使用redux
+
+### 使用redux![redux原理图](/redux原理图.png)
 
 npm install redux 下载
 
@@ -109,9 +113,9 @@ react-redux中不需要通过dispatch并传递给store一个action，通过store
 
 > react-redux原理
 
-![react-redux模型图](E:\学习文件\尚硅谷React全家桶教程\react全家桶资料\02_原理图\react-redux模型图.png)
+![react-redux模型图](/react-redux模型图.png)
 
-## 1.求和案例_react-redux基本使用
+ct-redux基本使用
 
 			(1).明确两个概念：
 						1).UI组件:不能使用任何redux的api，只负责页面的呈现、交互等。
@@ -171,7 +175,9 @@ react-redux中不需要通过dispatch并传递给store一个action，通过store
 					import {composeWithDevTools} from 'redux-devtools-extension'
 					const store = createStore(allReducer,composeWithDevTools(applyMiddleware(thunk)))
 
-## 5.求和案例_react-redux最终版
+![reat-redux开发者工具](/reat-redux开发者工具.png)
+
+### 5.求和案例_react-redux最终版
 
 			(1).所有变量名字要规范，尽量触发对象的简写形式。
 			(2).reducers文件夹中，编写index.js专门用于汇总并暴露所有的reducer
@@ -186,3 +192,28 @@ react-redux中不需要通过dispatch并传递给store一个action，通过store
    3. 不能调用Date.now()或者Math.random()等不纯的方法 
 
 3. redux的reducer函数必须是一个纯函数
+
+## 项目打包上线
+
+在终端输入npm run build 此时根目录内多出一个build文件，这是打包好的文件
+
+> 部署到服务器的方法
+
+1. 使用http-server插件：终端打开cd到build文件，然后输入http-server，点击网址就能访问了
+2. 使用serve插件：全局安装serve，然后在根目录下打开终端，输入serve build
+3. 或者用node配置一个服务器，运行
+
+```
+const express = require('express');
+const path = require('path');
+const app = express();
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+app.listen(9000);
+```
+

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { nanoid } from 'nanoid'
 import { connect } from 'react-redux'
-import {person} from '../../redux/actions/person'
+import {addPerson} from '../../redux/actions/person'
 
 class Person extends Component {
     addPerson = () => {
         const name = this.nameNode.value
         const age = this.ageNode.value
         const personObj = { id: nanoid(), name, age }
-        this.props.person(personObj)  // 准备好一个action对象 react-redux会自动叫reducer更新状态
+        this.props.addPerson(personObj)  // 准备好一个action对象 react-redux会自动叫reducer更新状态
         this.nameNode.value = ''
         this.ageNode.value = ''
     }
@@ -32,5 +32,5 @@ class Person extends Component {
 }
 export default connect(
     state => ({ persons: state.person,number:state.conut }), // 映射状态
-    {person} //映射操作状态的方法 value是action对象
+    {addPerson} //映射操作状态的方法 value是action对象
 )(Person)
